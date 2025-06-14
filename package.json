@@ -1,0 +1,19 @@
+{
+  "name": "netease-music-meta",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "bun build ./ --outdir ./dist",
+    "start": "bun run index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0"
+  }
+}

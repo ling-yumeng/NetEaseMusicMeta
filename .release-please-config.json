@@ -60,25 +60,8 @@
     }
   ],
   "packages": {
-    "packages/core": {
-      "release-type": "node",
-      "package-name": "node-karin",
-      "component": "core"
-    },
-    "packages/cli": {
-      "release-type": "node",
-      "package-name": "@karinjs/cli",
-      "component": "cli"
-    },
-    "packages/create-karin": {
-      "release-type": "node",
-      "package-name": "create-karin",
-      "component": "create-karin"
-    },
-    "packages/web": {
-      "release-type": "node",
-      "package-name": "karin-webui",
-      "component": "web"
+    ".": {
+      "release-type": "node"
     }
   },
   "commit-search-depth": 50

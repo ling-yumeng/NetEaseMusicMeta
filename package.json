@@ -8,12 +8,14 @@
     "start": "bun run index.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/fluent-ffmpeg": "^2.1.27"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
-    "crypto-js": "^4.2.0"
+    "crypto-js": "^4.2.0",
+    "fluent-ffmpeg": "^2.1.3"
   }
 }

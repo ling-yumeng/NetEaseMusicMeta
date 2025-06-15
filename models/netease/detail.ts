@@ -41,7 +41,6 @@ export default async function getDetail(id: number): Promise<Detail | null> {
  */
 function formatSongDetail(raw: any): Detail | null {
     const song = raw?.songs?.[0];
-    const privilege = raw?.privileges?.[0];
 
     if (!song) return null;
 

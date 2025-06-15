@@ -22,6 +22,11 @@ export default async function search(keywords: string) {
         },
         body,
     });
+
+    if (!response.ok) {
+        throw new Error(`请求失败: ${response.status} ${response.statusText}`);
+    }
+
     const data = await response.json() as any
     return data.result.songs[0];
 }

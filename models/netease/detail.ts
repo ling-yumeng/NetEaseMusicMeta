@@ -29,7 +29,7 @@ export default async function getDetail(id: number): Promise<Detail | null> {
     });
 
     if (!response.ok) {
-        throw new Error(`请求失败: ${response.status}`);
+        throw new Error(`请求失败: ${response.status} ${response.statusText}`);
     }
 
     return formatSongDetail(await response.json());

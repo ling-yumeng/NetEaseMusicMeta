@@ -7,8 +7,9 @@ on:
       - main
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: write   # 允许对仓库内容进行写操作（包括标签）
+  issues: write     # 如果使用 label 相关操作，确保给与 Issues 写权限
+  pull-requests: write  # 确保可以创建和修改 PR
 
 jobs:
   release:

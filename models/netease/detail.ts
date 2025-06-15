@@ -51,8 +51,7 @@ function formatSongDetail(raw: any): Detail | null {
 
         album: {
             id: song.al.id,
-            name: song.al.name,
-            cover: song.al.picUrl
+            name: song.al.name
         },
 
         cover: song.al.picUrl,

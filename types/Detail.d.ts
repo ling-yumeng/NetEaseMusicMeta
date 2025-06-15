@@ -6,7 +6,6 @@ export interface Detail {
     album: {
         id: number;             // 专辑 ID
         name: string;           // 专辑名称
-        cover: string;          // 专辑封面
     };
     duration: number;          // 歌曲时长（毫秒）
     bitrate: number;           // 最大码率

@@ -1,6 +1,11 @@
 import sign from "./sign";
 import jsonToUrlEncoded from "@utils/jsonToUrlEncoded";
 
+/**
+ * 根据关键词在网易云音乐进行搜索，返回搜索结果中的第一首歌曲信息
+ * @param keywords - 搜索关键词
+ * @returns 搜索结果中的第一首歌曲信息
+ */
 export default async function search(keywords: string) {
     let e = {
         "s": String(keywords),

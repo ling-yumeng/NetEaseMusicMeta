@@ -123,12 +123,12 @@ export default async function writeMetadataWithFFmpeg(
     const ext = path.extname(filePath).slice(1);
     const tempOut = `${filePath}.tmp.${ext}`;
     const coverPath = `${filePath}.cover.jpg`;
-    let lrcPath: string | null = null;
+    //let lrcPath: string | null = null;
 
     try {
         await fs.access(filePath);
         await downloadFile(detail.cover, coverPath);
-        lrcPath = await createLyricsFile(filePath, lyric);
+        //lrcPath = await createLyricsFile(filePath, lyric);
         const formatArgs = getFormatSpecificArgs(ext, detail, lyric);
 
         const args = [

@@ -3,6 +3,7 @@ import getDetail from "@models/netease/detail";
 import search from "@models/netease/search";
 import writeMetadataWithFFmpeg from "@utils/ffmpeg/writeMetadata";
 import readMetadata from "@utils/ffmpeg/readMetadata";
+import getComments from "@models/netease/comments";
 
 // getDetail(id).then(async (detail) => {
 //   if (!detail) return;
@@ -17,4 +18,5 @@ import readMetadata from "@utils/ffmpeg/readMetadata";
 
 const id = await search("创作者之死") as any
 
-console.log(await getDetail(id.id))
+// console.log(await getDetail(id.id))
+console.log(JSON.stringify(await getComments(id.id)))

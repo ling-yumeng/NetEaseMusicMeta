@@ -32,34 +32,6 @@ function escapeMetadata(text: string): string {
 }
 
 /**
- * 创建歌词文件（LRC格式），提高播放器兼容性
- */
-async function createLyricsFile(filePath: string, lyric: string): Promise<string | null> {
-    if (!lyric.trim()) return null;
-
-    const lrcPath = filePath.replace(path.extname(filePath), '.lrc');
-
-    try {
-        // 如果歌词不是LRC格式，则创建简单的LRC格式
-        let lrcContent = lyric;
-        if (!lyric.includes('[') || !lyric.includes(']')) {
-            const lines = lyric.split('\n').filter(line => line.trim());
-            lrcContent = lines.map((line, index) => {
-                const minutes = Math.floor(index * 5 / 60);
-                const seconds = (index * 5) % 60;
-                return `[${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.00]${line}`;
-            }).join('\n');
-        }
-
-        await fs.writeFile(lrcPath, lrcContent, 'utf-8');
-        return lrcPath;
-    } catch (error) {
-        console.warn('创建歌词文件失败:', error);
-        return null;
-    }
-}
-
-/**
  * 获取文件格式特定的元数据参数
  */
 function getFormatSpecificArgs(ext: string, detail: Detail, lyric: string): string[] {

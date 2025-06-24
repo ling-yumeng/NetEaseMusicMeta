@@ -12,6 +12,9 @@ target_link_libraries(lrc PUBLIC OpenMP::OpenMP_CXX)
 add_library(info info.cpp)
 target_link_libraries(info PUBLIC OpenMP::OpenMP_CXX)
 
+add_library(metadata metadata.cpp)
+target_link_libraries(metadata PUBLIC OpenMP::OpenMP_CXX)
+
 add_executable(nemeta main)
 target_link_libraries(nemeta PUBLIC OpenMP::OpenMP_CXX lrc info main)
 

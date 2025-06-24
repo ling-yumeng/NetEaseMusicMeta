@@ -11,13 +11,13 @@ namespace metadata {
         std::string title;
         std::string artist;
         std::string album;
-    }
+    };
     bool setMetadata(const char* filePath, metadata info) {
         char* cmd = new char[2048]; //Using Heap memory, instead of static stack memory.
-        char* fileExt = filePath;
+        char* fileExt = (char*)filePath;
         while (std::string(fileExt).find('.') != std::string::npos)
-            fileExt += string::npos + 1;
-        sprintf(cmd, "ffmpeg -i \"%s\" -metadata title=\"%s\" -metadata artist=\"%s\" -metadata album=\"%s\" -c:a copy \"%s.tmp.%s\"", filePath, metadata.title, metadata.artist, metadata.album, filePath, fileExt);
+            fileExt += std::string(fileExt).find('.') + 1;
+        sprintf(cmd, "ffmpeg -i \"%s\" -metadata title=\"%s\" -metadata artist=\"%s\" -metadata album=\"%s\" -c:a copy \"%s.tmp.%s\"", filePath, info.title, info.artist, info.album, filePath, fileExt);
         int ffmpeg_retv = system(cmd);
         if(ffmpeg_retv != 0) {
             std::cout << "FFmpeg Return with a non-zero value" << std::endl;
@@ -36,16 +36,16 @@ namespace metadata {
         return true;
     }
     metadata getMetaData(const char* filePath) {
-        const char* cmd = new char[2048];
+        char* cmd = new char[2048];
         sprintf(cmd, "ffmpeg -i '%s' -f ffmetadata '/tmp/%s.meta.txt'", filePath, filePath);
         system(cmd);
         metadata m;
         sprintf(cmd, "/tmp/%s.meta.txt", filePath);
-        std::ifstream metadata(cmd);
-        metadata.seekg(0, std::ios::end);
-        int length = metadata.tellg();
-        metadata.seekg(0, std::ios::beg);
-        metadata.read(cmd, length);
+        std::ifstream fmetadata(cmd);
+        fmetadata.seekg(0, std::ios::end);
+        int length = fmetadata.tellg();
+        fmetadata.seekg(0, std::ios::beg);
+        fmetadata.read(cmd, length);
         
 #pragma omp parallel for
         for(int i = 0; i < 3; i++) {

@@ -1,0 +1,3 @@
+[submodule "Cpp/sha256-cpp"]
+	path = Cpp/sha256-cpp
+	url = git@github.com:/kibonga/sha256-cpp.git

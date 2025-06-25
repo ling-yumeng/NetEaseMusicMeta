@@ -12,11 +12,26 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: anc95/ChatGPT-CodeReview@main
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check if PR is created by GitHub Bot
+        id: check_author
+        run: |
+          if [ "${{ github.actor }}" == "github-actions[bot]" ]; then
+            echo "PR created by GitHub Bot, skipping."
+            echo "skip=true" >> $GITHUB_ENV
+          else
+            echo "skip=false" >> $GITHUB_ENV
+          fi
+
+      - name: Run Code Review
+        if: ${{ env.skip != 'true' }}
+        uses: anc95/ChatGPT-CodeReview@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LANGUAGE: English
           MODEL: deepseek-ai/DeepSeek-R1
           OPENAI_API_ENDPOINT: https://api.qiucg.com/v1
           LOG_LEVEL: debug
-          INCLUDE_PATTERNS: './*'
+          INCLUDE_PATTERNS: '/*'

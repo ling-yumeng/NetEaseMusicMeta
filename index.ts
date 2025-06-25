@@ -18,6 +18,10 @@ import getComments from "@models/netease/comments";
 
 const id = await search("创作者之死") as any
 
-console.log(await getDetail(id.id))
-console.log(id.id)
+// console.log(await getDetail(id.id))
+// console.log(id.id)
 // console.log(JSON.stringify(await getComments(id.id)))
+
+import getSong from "@models/netease/player";
+
+console.log(await getSong(id.id))

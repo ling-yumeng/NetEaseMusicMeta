@@ -28,6 +28,5 @@ export default async function getSong(id: number, level: string = "jyeffect"): P
         body: data
     });
 
-    const res = await response.json() as SongResponse;
-    return res;
+    return await response.json() as SongResponse;
 }

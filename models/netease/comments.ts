@@ -2,6 +2,13 @@ import sign from "./sign.js";
 import jsonToUrlEncoded from "@utils/jsonToUrlEncoded";
 import type { ResponseData } from './comments.d';
 
+/**
+ * 获取网易云音乐评论数据
+ *
+ * @param id - 歌曲ID，用于构建评论请求参数
+ * @returns 返回解析后的评论数据Promise对象，包含评论列表和其他相关信息
+ * @throws 如果HTTP请求失败，会抛出包含状态码和状态文本的错误
+ */
 export default async function getComments(id: number) {
     let payload = {
         "rid": `R_SO_4_${id}`,

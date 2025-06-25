@@ -1,5 +1,12 @@
 import type { SongResponse } from "./player.d";
 
+/**
+ * 获取指定歌曲的播放信息。
+ *
+ * @param id - 歌曲的唯一标识符。
+ * @param level - 音质等级，默认为 "jyeffect"。
+ * @returns 一个 Promise，解析为 SongResponse 类型的结果。
+ */
 export default async function getSong(id: number, level: string = "jyeffect"): Promise<SongResponse> {
     const url = `https://interface.music.163.com/api/song/enhance/player/url/v1`;
 

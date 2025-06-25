@@ -1,5 +1,6 @@
 import sign from "./sign.js";
 import jsonToUrlEncoded from "@utils/jsonToUrlEncoded";
+import type { ResponseData } from './comments.d';
 
 export default async function getComments(id: number) {
     let payload = {
@@ -29,5 +30,5 @@ export default async function getComments(id: number) {
         throw new Error(`请求失败: ${response.status} ${response.statusText}`);
     }
 
-    return await response.json();
+    return await response.json() as ResponseData;
 }

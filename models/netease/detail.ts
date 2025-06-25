@@ -1,6 +1,6 @@
 import sign from "./sign";
 import jsonToUrlEncoded from "@utils/jsonToUrlEncoded";
-import type { Detail } from "../../types/Detail";
+import type { Detail } from "./detail.d";
 /**
  * 获取网易云歌曲原始详情
  * @param id 歌曲 ID

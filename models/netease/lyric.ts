@@ -1,13 +1,6 @@
 import sign from "./sign.js";
 import { URLSearchParams } from "url";
-
-interface LyricResponse {
-    code: number;
-    lrc: {
-        lyric: string;
-    };
-};
-
+import type { LyricResponse } from "./lyric.d";
 /**
  * 获取网易云歌词
  * @param id 歌曲 ID

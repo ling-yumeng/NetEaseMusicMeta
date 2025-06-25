@@ -1,6 +1,6 @@
 import sign from "./sign";
 import jsonToUrlEncoded from "@utils/jsonToUrlEncoded";
-
+import type { Song } from "./search.d";
 /**
  * 根据关键词在网易云音乐进行搜索，返回搜索结果中的第一首歌曲信息
  * @param keywords - 搜索关键词
@@ -33,5 +33,5 @@ export default async function search(keywords: string) {
     }
 
     const data = await response.json() as any
-    return data.result.songs[0];
+    return data.result.songs[0] as Song;
 }

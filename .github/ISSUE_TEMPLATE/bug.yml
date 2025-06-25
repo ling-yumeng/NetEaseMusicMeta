@@ -59,8 +59,8 @@ body:
   - type: input
     id: node-version
     attributes:
-      label: Node.js 版本
-      placeholder: 例如：22.14.0
+      label: Node.js or Bun 版本
+      placeholder: 例如：NodeJs 22.14.0 或 Bun 1.2.17
     validations:
       required: true
 

@@ -12,7 +12,7 @@ namespace meta_match {
         for(int i=0; i < music.artists_length; i++) {
             remoteMetadata.artist += music.artists[i];
             if(i < (music.artists_length - 1))
-                remoteMetadata.artist += "/";
+                remoteMetadata.artist += ";";
         }
         remoteMetadata.album = music.album_name;
 

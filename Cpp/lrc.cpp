@@ -25,7 +25,7 @@ namespace lrc {
 	lrc::lrc(const char* filePath, int id) {
 		this->filePath_length = std::string(filePath).length();
 		this->filePath = new char[filePath_length+1];
-#pragma omp parallel for
+		#pragma omp parallel for
 		for(int i = 0; i < filePath_length; i++) {
 			this->filePath[i] = filePath[i];
 		}

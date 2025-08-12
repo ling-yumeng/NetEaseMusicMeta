@@ -7,6 +7,8 @@
 #include <memory>
 #include <stdexcept>
 
+#define debug false
+
 namespace info {
 	class info {
 	public:
@@ -78,7 +80,16 @@ namespace info {
 			}
 			return output;
 		};
-#pragma omp parallel for
+		char deb_buffer[12];
+		if (debug) std::cout << "#####\n[PRE] OpenMP Parallel For\n------------" << std::endl;
+		if (debug) std::cin.getline(deb_buffer, 12);
+
+		std::string name;
+		std::string* artists;
+		int artists_length;
+		std::string album_name;
+		std::string coverURL;
+#pragma omp parallel for schedule(dynamic)
 		for(int i = 0; i<6; i++) {
 			switch (i) {
 				case 0: {
@@ -86,15 +97,23 @@ namespace info {
 					break;
 				}
 				case 1: {
-					this->name = readInfo(id, "fullname");
+					if (debug) std::cout << "#####\n[PRE] name = readInfo(id, \"fullname\");\n------------" << std::endl;
+					if (debug) std::cin.getline(deb_buffer, 12);
+					name = readInfo(id, "fullname");
+					if (debug) std::cout << "#####\n[POST] name = readInfo(id, \"fullname\");\n------------" << std::endl;
+					if (debug) std::cin.getline(deb_buffer, 12);
 					break;
 				}
 				case 2: {
+					if (debug) std::cout << "#####\n[PRE] auto buffer_2 = readInfo(id, \"artists\");\n------------" << std::endl;
+					if (debug) std::cin.getline(deb_buffer, 12);
 					auto buffer_2 = readInfo(id, "artists");
+					if (debug) std::cout << "#####\n[POST] auto buffer_2 = readInfo(id, \"artists\");\n------------" << std::endl;
+					if (debug) std::cin.getline(deb_buffer, 12);
 					int artists_num;
 					sscanf(buffer_2.c_str(), "%d", &artists_num);
-					this->artists = new std::string[artists_num];
-					this->artists_length = artists_num;
+					artists = new std::string[artists_num];
+					artists_length = artists_num;
 					int* artist_name_length = new int[artists_num];
 					const char* buffer_c = buffer_2.c_str();
 					buffer_c += buffer_2.find(' ');
@@ -104,7 +123,7 @@ namespace info {
 						buffer_c += std::string(buffer_c).find(' ') + 1;
 					}
 					for(int j = 0; j < artists_num; j++) {
-						this->artists[j] = std::string(buffer_c).substr(0, artist_name_length[j]);
+						artists[j] = std::string(buffer_c).substr(0, artist_name_length[j]);
 						buffer_c += artist_name_length[j];
 					}
 					delete[] artist_name_length;
@@ -113,20 +132,41 @@ namespace info {
 					break;
 				}
 				case 3: {
+					if (debug) std::cout << "#####\n[PRE] auto buffer_3 = readInfo(id, \"album_id\");\n------------" << std::endl;
+					if (debug) std::cin.getline(deb_buffer, 12);
 					auto buffer_3 = readInfo(id, "album_id");
-					sscanf(buffer_3.c_str(), "%d", &this->album_id);
+					if (debug) std::cout << "#####\n[POST] auto buffer_3 = readInfo(id, \"album_id\");\n------------" << std::endl;
+					if (debug) std::cin.getline(deb_buffer, 12);
+					sscanf(buffer_3.c_str(), "%d", &album_id);
 					break;
 				}
 				case 4: {
-					this->album_name = readInfo(id, "album_name");
+					if (debug) std::cout << "#####\n[PRE] album_name = readInfo(id, \"album_name\");\n------------" << std::endl;
+					if (debug) std::cin.getline(deb_buffer, 12);
+					album_name = readInfo(id, "album_name");
+					if (debug) std::cout << "#####\n[POST] album_name = readInfo(id, \"album_name\");\n------------" << std::endl;
+					if (debug) std::cin.getline(deb_buffer, 12);
 					break;
 				}
 				case 5: {
-					this->coverURL = readInfo(id, "cover");
+					if (debug) std::cout << "#####\n[PRE] coverURL = readInfo(id, \"cover\");\n------------" << std::endl;
+					if (debug) std::cin.getline(deb_buffer, 12);
+					coverURL = readInfo(id, "cover");
+					if (debug) std::cout << "#####\n[POST] coverURL = readInfo(id, \"cover\");\n------------" << std::endl;
+					if (debug) std::cin.getline(deb_buffer, 12);
 					break;
 				}
 			}
 		}
+		if (debug) std::cout << "#####\n[POST] OpenMP Parallel For\n------------" << std::endl;
+		if (debug) std::cin.getline(deb_buffer, 12);
+
+		this->name = name;
+		this->artists = artists;
+		this->artists_length = artists_length;
+		this->album_name = album_name;
+		this->coverURL = coverURL;
+
 		this->init = true;
 	}
 	void info::getInfoByKeywords(const char* keywords) {

@@ -47,29 +47,37 @@ namespace metadata {
         fmetadata.seekg(0, std::ios::beg);
         fmetadata.read(cmd, length);
         
-#pragma omp parallel for
+        //parallel cache
+        std::string m_cache_title;
+        std::string m_cache_artist;
+        std::string m_cache_album;
+#pragma omp parallel for schedule(dynamic)
         for(int i = 0; i < 3; i++) {
             switch (i) {
                 case 0: {
                     char* title = cmd;
                     title += std::string(title).find("title=") + 6;
-                    m.title = std::string(title).substr(0, std::string(title).find('\n'));
+                    m_cache_title = std::string(title).substr(0, std::string(title).find('\n'));
                     break;
                 }
                 case 1: {
                     char* artist = cmd;
                     artist += std::string(artist).find("artist=") + 7;
-                    m.artist = std::string(artist).substr(0, std::string(artist).find('\n'));
+                    m_cache_artist = std::string(artist).substr(0, std::string(artist).find('\n'));
                     break;
                 }
                 case 2: {
                     char* album = cmd;
                     album += std::string(album).find("album=") + 7;
-                    m.album = std::string(album).substr(0, std::string(album).find('\n'));
+                    m_cache_album = std::string(album).substr(0, std::string(album).find('\n'));
                     break;
                 }
             }
         }
+        //Write back
+        m.title = m_cache_title;
+        m.artist = m_cache_artist;
+        m.album = m_cache_album;
 
         sprintf(cmd, "/tmp/%s.meta.txt", filePath);
         unlink(cmd);

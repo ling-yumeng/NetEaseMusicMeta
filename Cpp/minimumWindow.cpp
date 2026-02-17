@@ -73,8 +73,8 @@ private:
         if(pid == 0) {
             close(writePipe[1]);
             close(readPipe[0]);
-            dup2(writePipe[1], STDIN_FILENO);
-            dup2(readPipe[0], STDOUT_FILENO);
+            dup2(writePipe[0], STDIN_FILENO);
+            dup2(readPipe[1], STDOUT_FILENO);
             execl("./nemeta", "./nemeta", NULL);
             exit(1);
         }
@@ -108,8 +108,9 @@ private:
         //fflush(pipe);
 
         char buf[256];
-        auto nemeta_out = fopen("./nemeta.out", "r");
-        if (fgets(buf, sizeof(buf), nemeta_out)) {
+        //auto nemeta_out = fopen("./nemeta.out", "r");
+        //if (fgets(buf, sizeof(buf), nemeta_out)) {
+        if(read(readPipe[0], buf, 255)) {
             DBG("Received: " << buf);
             nameText->SetLabel(wxString("Name: ") + buf);
         } else {

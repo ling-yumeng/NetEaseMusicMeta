@@ -53,7 +53,6 @@ namespace info {
 		char cmd[64];
 		sprintf(cmd, "env KEYWORDS=\"%s\" bun run info/search.ts", keywords);
 		char rbuffer[64];
-		//std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd,"r"), pclose);
 		auto pipe = popen(cmd, "r");
 		if(!pipe) {
 			throw std::runtime_error("popen failed!");

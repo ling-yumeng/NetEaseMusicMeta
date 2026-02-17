@@ -5,30 +5,30 @@ const detail = await getDetail(id);
 
 switch (process.env.TYPE) {
 	case "fullname" :
-		console.log(detail.name);
+		process.stdout.write(detail.name + "\n");
 		break;
 	case "artists" :
-		console.log(detail.artists.length);
+		process.stdout.write(String(detail.artists.length) + "\n");
 		let out = "";
 		for(let i = 0; i < detail.artists.length; i++) {
 			out += Buffer.from(detail.artists[i], "utf-8").length + " ";
 		}
-		console.log(out);
+		process.stdout.write(out + "\n");
 		out = "";
 		for(let i = 0; i < detail.artists.length; i++) {
 			out += detail.artists[i];
 		}
-		console.log(out);
+		process.stdout.write(out + "\n");
 		break;
 	case "cover" :
-		console.log(detail.cover);
+		process.stdout.write(detail.cover + "\n");
 		break;
 	case "album_id" :
-		console.log(detail.album.id);
+		process.stdout.write(detail.album.id + "\n");
 		break;
 	case "album_name" :
-		console.log(detail.album.name);
+		process.stdout.write(detail.album.name + "\n");
 		break;
 	default:
-		console.log("[Bad call]");
+		process.stdout.write("[Bad call]");
 }

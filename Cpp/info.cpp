@@ -80,7 +80,7 @@ namespace info {
 			while (fgets(rbuffer, 32, pipe) != nullptr) {
 				output += rbuffer;
 			}
-			return output;
+			return output.substr(0, output.length() - 1);
 		};
 		char deb_buffer[12];
 		if (debug) std::cout << "#####\n[PRE] OpenMP Parallel For\n------------" << std::endl;
@@ -107,23 +107,20 @@ namespace info {
 					break;
 				}
 				case 2: {
-					if (debug) std::cout << "#####\n[PRE] auto buffer_2 = readInfo(id, \"artists\");\n------------" << std::endl;
-					if (debug) std::cin.getline(deb_buffer, 12);
 					auto buffer_2 = readInfo(id, "artists");
-					if (debug) std::cout << "#####\n[POST] auto buffer_2 = readInfo(id, \"artists\");\n------------" << std::endl;
-					if (debug) std::cin.getline(deb_buffer, 12);
 					int artists_num;
 					sscanf(buffer_2.c_str(), "%d", &artists_num);
 					artists = new std::string[artists_num];
 					artists_length = artists_num;
 					int* artist_name_length = new int[artists_num];
 					const char* buffer_c = buffer_2.c_str();
-					buffer_c += buffer_2.find(' ');
+					buffer_c += buffer_2.find('\n');
 					buffer_c ++;
 					for(int j = 0; j < artists_num; j++) {
-						sscanf(buffer_c, "%d ", artist_name_length + j);
+						sscanf(buffer_c, "%d", artist_name_length + j);
 						buffer_c += std::string(buffer_c).find(' ') + 1;
 					}
+					buffer_c++;
 					for(int j = 0; j < artists_num; j++) {
 						artists[j] = std::string(buffer_c).substr(0, artist_name_length[j]);
 						buffer_c += artist_name_length[j];

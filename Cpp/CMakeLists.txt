@@ -21,3 +21,5 @@ target_link_libraries(meta_match PUBLIC metadata info lrc)
 add_executable(nemeta main)
 target_link_libraries(nemeta PUBLIC OpenMP::OpenMP_CXX lrc info main)
 
+file(COPY info DESTINATION .)
+

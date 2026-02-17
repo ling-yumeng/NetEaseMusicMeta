@@ -53,16 +53,17 @@ namespace info {
 		char cmd[64];
 		sprintf(cmd, "env KEYWORDS=\"%s\" bun run info/search.ts", keywords);
 		char rbuffer[64];
-		std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd,"r"), pclose);
+		//std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd,"r"), pclose);
+		auto pipe = popen(cmd, "r");
 		if(!pipe) {
 			throw std::runtime_error("popen failed!");
 		}
 		std::string output = "";
-		while (fgets(rbuffer, 32, pipe.get()) != nullptr) {
+		while (fgets(rbuffer, 32, pipe) != nullptr) {
+			rbuffer[32] = 0;
 			output += rbuffer;
 		}
-		int id=0;
-		sscanf(output.c_str(), "%d", &id);
+		int id=std::stoi(output.c_str());
 		return id;
 	}
 	void info::get(int id) {
@@ -70,12 +71,13 @@ namespace info {
 			char cmd[128];
 			sprintf(cmd, "env SID=%d TYPE=%s bun run info/getDetail.ts", id, type);
 			char rbuffer[64];
-			std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd,"r"), pclose);
+			//std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd,"r"), pclose);
+			auto pipe = popen(cmd, "r");
 			if(!pipe) {
 				throw std::runtime_error("popen failed!");
 			}
 			std::string output = "";
-			while (fgets(rbuffer, 32, pipe.get()) != nullptr) {
+			while (fgets(rbuffer, 32, pipe) != nullptr) {
 				output += rbuffer;
 			}
 			return output;

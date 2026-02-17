@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmeta_match.a CMakeFiles/meta_match.dir/meta_match.cpp.o
+/usr/bin/ranlib libmeta_match.a

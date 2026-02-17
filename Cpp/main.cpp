@@ -22,14 +22,6 @@ int main() {
 	*/
 
 	info::info sngInfo;
-
-	if (debug) std::cout << "###\nBreak Here\n###\n [PRE] sngInfo.get(2014232695);\n--------" << std::endl;
-	if (debug) std::cin.getline(deb_buffer, 12);
-	sngInfo.get(2014232695);
-	if (debug) std::cout << "###\nBreak Here\n###\n [POST] sngInfo.get(2014232695);\n--------" << std::endl;
-	if (debug) std::cin.getline(deb_buffer, 12);
-	std::cout << sngInfo.name << std::endl << sngInfo.album_name << std::endl << sngInfo.coverURL << std::endl;
-
-	// if (debug) system("cat test.lrc");
+	std::cout << info::info::searchByKeywords("") << std::endl;
 	return 0;
 }

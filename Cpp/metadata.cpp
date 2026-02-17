@@ -13,7 +13,7 @@ namespace metadata {
         std::string album;
     };
     bool setMetadata(const char* filePath, metadata info) {
-        char* cmd = new char[2048]; //Using Heap memory, instead of static stack memory.
+        char* cmd = new char[2048];
         char* fileExt = (char*)filePath;
         while (std::string(fileExt).find('.') != std::string::npos)
             fileExt += std::string(fileExt).find('.') + 1;

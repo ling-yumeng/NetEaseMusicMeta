@@ -1,0 +1,8 @@
+/home/ff-c109/NetEaseMusicMeta/build/CMakeFiles/main.dir
+/home/ff-c109/NetEaseMusicMeta/build/CMakeFiles/lrc.dir
+/home/ff-c109/NetEaseMusicMeta/build/CMakeFiles/info.dir
+/home/ff-c109/NetEaseMusicMeta/build/CMakeFiles/metadata.dir
+/home/ff-c109/NetEaseMusicMeta/build/CMakeFiles/meta_match.dir
+/home/ff-c109/NetEaseMusicMeta/build/CMakeFiles/nemeta.dir
+/home/ff-c109/NetEaseMusicMeta/build/CMakeFiles/edit_cache.dir
+/home/ff-c109/NetEaseMusicMeta/build/CMakeFiles/rebuild_cache.dir

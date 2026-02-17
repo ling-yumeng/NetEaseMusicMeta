@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/nemeta.dir/link.d CMakeFiles/nemeta.dir/main.cpp.o -o nemeta  liblrc.a libinfo.a libmain.a /usr/lib/libgomp.so /usr/lib/libpthread.a

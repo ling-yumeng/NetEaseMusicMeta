@@ -1,2 +1,0 @@
-/usr/bin/ar qc liblrc.a CMakeFiles/lrc.dir/lrc.cpp.o
-/usr/bin/ranlib liblrc.a

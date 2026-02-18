@@ -66,7 +66,7 @@ int main() {
 	else if(std::string(buffer).substr(0, std::string("album-name").length()) == std::string("album-name")) {
 		std::cout << sngInfo.album_name << std::endl;
 	}
-	else if(std::string(buffer).substr(0, std::string("album-id").length()) == std::string("album-name")) {
+	else if(std::string(buffer).substr(0, std::string("album-id").length()) == std::string("album-id")) {
 		std::cout << sngInfo.album_id << std::endl;
 	}
 	else if(std::string(buffer).substr(0, std::string("cover").length()) == std::string("cover")) {

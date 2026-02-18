@@ -4,6 +4,9 @@
 #include <wx/url.h>
 #include <wx/sstream.h>
 #include <wx/mstream.h>
+#include <string.h>
+#include "info.h"
+
 #define debug true
 
 #if debug
@@ -50,7 +53,8 @@ public:
 
         // ====== 事件绑定 ======
         searchBtn->Bind(wxEVT_BUTTON, [=](wxCommandEvent&) {
-            auto text = searchBox->GetValue().ToStdString();
+            //auto text = searchBox->GetValue().ToStdString();
+            std::string text = searchBox->GetValue().ToUTF8().data();
             querySong(text);
         });
     }
@@ -62,63 +66,17 @@ private:
     wxStaticText* albumText;
 
     void querySong(const std::string& song) {
-        DBG("Starting query for: " << song);
-
-        //auto pipe = popen("./nemeta > nemeta.out", "w");
-        int writePipe[2];
-        int readPipe[2];
-        pipe(writePipe);
-        pipe(readPipe);
-        auto pid = fork();
-        if(pid == 0) {
-            close(writePipe[1]);
-            close(readPipe[0]);
-            dup2(writePipe[0], STDIN_FILENO);
-            dup2(readPipe[1], STDOUT_FILENO);
-            execl("./nemeta", "./nemeta", NULL);
-            exit(1);
+        DBG("Quering " << song);
+        info::info sngInfo;
+        sngInfo.get(info::info::searchByKeywords(song.c_str()));
+        nameText->SetLabel(wxString("Name: ") + sngInfo.name);
+        albumText->SetLabel(wxString("Album: ") + sngInfo.album_name);
+        std::string artists_display = "";
+        for(int i = 0; i<sngInfo.artists_length; i++) {
+            artists_display += sngInfo.artists[i];
+            artists_display += "\n";
         }
-        close(writePipe[0]);
-        close(readPipe[1]);
-        auto send_to_child = [&writePipe](const char* content) {
-            std::string buffer(content);
-            buffer += "\n";
-            write(writePipe[1], buffer.c_str(), buffer.length());
-        };
-
-        //if (!pipe) {
-        //    DBG("Failed to start process");
-        //    return;
-        //}
-
-        DBG("Process started");
-
-        //fprintf(pipe, "get-by-name\n");
-        send_to_child("get-by-name");
-        DBG("get-by-name");
-
-        //fprintf(pipe, "%s\n", song.c_str());
-        send_to_child(song.c_str());
-        DBG(song.c_str());
-
-        //fprintf(pipe, "name\n");
-        send_to_child("name");
-        DBG("name");
-
-        //fflush(pipe);
-
-        char buf[256];
-        //auto nemeta_out = fopen("./nemeta.out", "r");
-        //if (fgets(buf, sizeof(buf), nemeta_out)) {
-        if(read(readPipe[0], buf, 255)) {
-            DBG("Received: " << buf);
-            nameText->SetLabel(wxString("Name: ") + buf);
-        } else {
-            DBG("No response received");
-        }
-
-        //pclose(pipe);
-        DBG("Process closed");
+        artistText->SetLabel(wxString("Artists: ") + artists_display.c_str());
     }
 };
 

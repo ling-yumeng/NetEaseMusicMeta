@@ -4,8 +4,11 @@
 #include <wx/url.h>
 #include <wx/sstream.h>
 #include <wx/mstream.h>
+#include <wx/imagpng.h>
 #include <string.h>
+#include <string>
 #include "info.h"
+#include <vector>
 
 #define debug true
 
@@ -14,6 +17,22 @@
 #else
 #define DBG(x)
 #endif
+
+class MainFrame;
+
+class DownloadThread : public wxThread {
+    public:
+    DownloadThread(MainFrame* frame, std::string url)
+        : wxThread(wxTHREAD_DETACHED), frame(frame), url(url) {}
+
+    protected:
+    ExitCode Entry() override;
+
+    private:
+    MainFrame* frame;
+    std::string url;
+};
+
 
 class MainFrame : public wxFrame {
 public:
@@ -35,6 +54,9 @@ public:
         artistText = new wxStaticText(this, wxID_ANY, "Artists:");
         albumText = new wxStaticText(this, wxID_ANY, "Album:");
 
+        //运行状态
+        runInfo = new wxStaticText(this, wxID_ANY, "standby.");
+
         auto infoSizer = new wxBoxSizer(wxVERTICAL);
         infoSizer->Add(nameText, 0, wxALL, 5);
         infoSizer->Add(artistText, 0, wxALL, 5);
@@ -48,6 +70,7 @@ public:
         auto mainSizer = new wxBoxSizer(wxVERTICAL);
         mainSizer->Add(topSizer, 0, wxEXPAND);
         mainSizer->Add(bottomSizer, 1, wxEXPAND);
+        mainSizer->Add(runInfo, 2, wxALL, 10);
 
         SetSizer(mainSizer);
 
@@ -55,7 +78,14 @@ public:
         searchBtn->Bind(wxEVT_BUTTON, [=](wxCommandEvent&) {
             //auto text = searchBox->GetValue().ToStdString();
             std::string text = searchBox->GetValue().ToUTF8().data();
+            runInfo->SetLabel(wxString("Quering..."));
             querySong(text);
+        });
+        Bind(wxEVT_THREAD, [&](wxThreadEvent&) {
+            runInfo->SetLabel(wxString("Download Finished!"));
+            DBG("Download finished!");
+            wxImage img("cover.jpg", wxBITMAP_TYPE_JPEG);
+            cover->SetBitmap(wxBitmap(img.Scale(200, 200, wxIMAGE_QUALITY_HIGH)));
         });
     }
 
@@ -64,25 +94,76 @@ private:
     wxStaticText* nameText;
     wxStaticText* artistText;
     wxStaticText* albumText;
+    wxStaticText* runInfo;
 
     void querySong(const std::string& song) {
         DBG("Quering " << song);
         info::info sngInfo;
         sngInfo.get(info::info::searchByKeywords(song.c_str()));
-        nameText->SetLabel(wxString("Name: ") + sngInfo.name);
-        albumText->SetLabel(wxString("Album: ") + sngInfo.album_name);
+        DBG("Full name: " << sngInfo.name.c_str());
+        nameText->SetLabel(wxString("Name: ") + wxString::FromUTF8(sngInfo.name.c_str()));
+        DBG("Album name: " << sngInfo.album_name.c_str());
+        albumText->SetLabel(wxString("Album: ") + wxString::FromUTF8(sngInfo.album_name.c_str()));
         std::string artists_display = "";
         for(int i = 0; i<sngInfo.artists_length; i++) {
+            if(i != 0) artists_display += ", ";
             artists_display += sngInfo.artists[i];
-            artists_display += "\n";
         }
-        artistText->SetLabel(wxString("Artists: ") + artists_display.c_str());
+        DBG("Artists: " << artists_display);
+        artistText->SetLabel(wxString("Artists: ") + wxString::FromUTF8(artists_display.c_str()));
+        runInfo->SetLabel(wxString("Downloading..."));
+        DBG("Downloading Cover");
+        auto th = new DownloadThread(this, sngInfo.coverURL);
+        th->Run();
+        //runInfo->SetLabel(wxString("standby."));
     }
 };
+
+wxThread::ExitCode DownloadThread::Entry()  {
+    /*aria2::libraryInit();
+    aria2::SessionConfig config;
+    aria2::KeyVals options;
+    aria2::KeyVals sessionOptions;
+    //sessionOptions.emplace_back("dir", ".");
+    options.push_back({"dir", "."});
+    aria2::Session* session = aria2::sessionNew(sessionOptions, config);
+    if(!session) {
+        std::cerr << "Failed to create session" << std::endl;
+        return (wxThread::ExitCode)1;
+    }
+    std::vector<std::string> uris = { url };
+    DBG("Cover URL: " << url);
+    aria2::A2Gid gid = aria2::addUri(session, nullptr, uris, options);
+    if(!gid) {
+        std::cerr << "Fail to add download" << std::endl;
+        return (wxThread::ExitCode)1;
+    }
+    int running = 1;
+    while(running) {
+        running = aria2::run(session, aria2::RUN_ONCE);
+    }
+
+    aria2::sessionFinal(session);
+    aria2::libraryDeinit();
+
+    wxQueueEvent(frame,
+        new wxThreadEvent(wxEVT_THREAD, wxID_ANY));
+
+    return (wxThread::ExitCode)0;*/
+    system("unlink cover.jpg");
+    DBG("Downloading " << url);
+    std::string cmd("aria2c -o cover.jpg ");
+    cmd += url;
+    system(cmd.c_str());
+    wxQueueEvent(frame,
+        new wxThreadEvent(wxEVT_THREAD, wxID_ANY));
+    return (wxThread::ExitCode)0;
+}
 
 class MyApp : public wxApp {
 public:
     bool OnInit() override {
+        wxInitAllImageHandlers();
         auto frame = new MainFrame();
         frame->Show(true);
         return true;

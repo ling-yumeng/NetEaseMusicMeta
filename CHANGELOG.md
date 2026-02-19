@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.1](https://github.com/MEMLTS/NetEaseMusicMeta/compare/v1.1.0...v1.1.1) (2026-02-19)
+
+
+### ♻️ 代码重构
+
+* **index:** comment out unused console logs and add getSong import ([039a446](https://github.com/MEMLTS/NetEaseMusicMeta/commit/039a446e6d04f709943b72d8517d00dc1a8aaab5))
+* **netease/player:** simplify song response handling ([ea2ae88](https://github.com/MEMLTS/NetEaseMusicMeta/commit/ea2ae886f799314258aa6f90f8bbbaf5feffcf86))
+* **netease:** improve type safety and clean up unused code ([6dcad96](https://github.com/MEMLTS/NetEaseMusicMeta/commit/6dcad96c1ba367e2d1971d9dbc38c877be67732b))
+* update issue template for Bun support ([2dd018c](https://github.com/MEMLTS/NetEaseMusicMeta/commit/2dd018c6a2f1335d0bf959df4f3082fa899ac073))
+
+
+### 🎡 持续集成
+
+* improve ChatGPT Code Review workflow ([8da55a0](https://github.com/MEMLTS/NetEaseMusicMeta/commit/8da55a0dea662ca05094953024e3a52f31922c9b))
+* 更新代码审查工作流和模型函数 ([b749537](https://github.com/MEMLTS/NetEaseMusicMeta/commit/b7495370291d39a2fcfeb015b5a94d711c8bb648))
+
 ## [1.1.0](https://github.com/MEMLTS/NetEaseMusicMeta/compare/v1.0.0...v1.1.0) (2025-06-24)
 
 

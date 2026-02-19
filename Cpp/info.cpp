@@ -53,16 +53,16 @@ namespace info {
 		char cmd[64];
 		sprintf(cmd, "env KEYWORDS=\"%s\" bun run info/search.ts", keywords);
 		char rbuffer[64];
-		std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd,"r"), pclose);
+		auto pipe = popen(cmd, "r");
 		if(!pipe) {
 			throw std::runtime_error("popen failed!");
 		}
 		std::string output = "";
-		while (fgets(rbuffer, 32, pipe.get()) != nullptr) {
+		while (fgets(rbuffer, 32, pipe) != nullptr) {
+			rbuffer[32] = 0;
 			output += rbuffer;
 		}
-		int id=0;
-		sscanf(output.c_str(), "%d", &id);
+		int id=std::stoi(output.c_str());
 		return id;
 	}
 	void info::get(int id) {
@@ -70,15 +70,16 @@ namespace info {
 			char cmd[128];
 			sprintf(cmd, "env SID=%d TYPE=%s bun run info/getDetail.ts", id, type);
 			char rbuffer[64];
-			std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd,"r"), pclose);
+			//std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd,"r"), pclose);
+			auto pipe = popen(cmd, "r");
 			if(!pipe) {
 				throw std::runtime_error("popen failed!");
 			}
 			std::string output = "";
-			while (fgets(rbuffer, 32, pipe.get()) != nullptr) {
+			while (fgets(rbuffer, 32, pipe) != nullptr) {
 				output += rbuffer;
 			}
-			return output;
+			return output.substr(0, output.length() - 1);
 		};
 		char deb_buffer[12];
 		if (debug) std::cout << "#####\n[PRE] OpenMP Parallel For\n------------" << std::endl;
@@ -105,23 +106,20 @@ namespace info {
 					break;
 				}
 				case 2: {
-					if (debug) std::cout << "#####\n[PRE] auto buffer_2 = readInfo(id, \"artists\");\n------------" << std::endl;
-					if (debug) std::cin.getline(deb_buffer, 12);
 					auto buffer_2 = readInfo(id, "artists");
-					if (debug) std::cout << "#####\n[POST] auto buffer_2 = readInfo(id, \"artists\");\n------------" << std::endl;
-					if (debug) std::cin.getline(deb_buffer, 12);
 					int artists_num;
 					sscanf(buffer_2.c_str(), "%d", &artists_num);
 					artists = new std::string[artists_num];
 					artists_length = artists_num;
 					int* artist_name_length = new int[artists_num];
 					const char* buffer_c = buffer_2.c_str();
-					buffer_c += buffer_2.find(' ');
+					buffer_c += buffer_2.find('\n');
 					buffer_c ++;
 					for(int j = 0; j < artists_num; j++) {
-						sscanf(buffer_c, "%d ", artist_name_length + j);
+						sscanf(buffer_c, "%d", artist_name_length + j);
 						buffer_c += std::string(buffer_c).find(' ') + 1;
 					}
+					buffer_c++;
 					for(int j = 0; j < artists_num; j++) {
 						artists[j] = std::string(buffer_c).substr(0, artist_name_length[j]);
 						buffer_c += artist_name_length[j];

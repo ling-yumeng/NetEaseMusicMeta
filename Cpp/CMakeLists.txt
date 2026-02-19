@@ -6,18 +6,25 @@ find_package(OpenMP REQUIRED)
 
 add_library(main main.cpp)
 
-add_library(lrc lrc.cpp)
+add_library(lrc SHARED lrc.cpp)
 target_link_libraries(lrc PUBLIC OpenMP::OpenMP_CXX)
 
-add_library(info info.cpp)
+add_library(info SHARED info.cpp)
 target_link_libraries(info PUBLIC OpenMP::OpenMP_CXX)
-
-add_library(metadata metadata.cpp)
-target_link_libraries(metadata PUBLIC OpenMP::OpenMP_CXX)
-
-add_library(meta_match meta_match.cpp)
-target_link_libraries(meta_match PUBLIC metadata info lrc)
 
 add_executable(nemeta main)
 target_link_libraries(nemeta PUBLIC OpenMP::OpenMP_CXX lrc info main)
 
+find_package(wxWidgets REQUIRED COMPONENTS core base net)
+include(${wxWidgets_USE_FILE})
+
+add_library(download miniGUI/download.cpp)
+
+add_library(main_frame miniGUI/main_frame.cpp)
+target_link_libraries(main_frame PUBLIC download info)
+
+add_executable(nemeta_gui miniGUI/gui_main.cpp)
+target_link_libraries(nemeta_gui PUBLIC ${wxWidgets_LIBRARIES} main_frame)
+
+file(COPY info DESTINATION .)
+file(COPY lrc DESTINATION .)
